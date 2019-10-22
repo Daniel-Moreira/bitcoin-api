@@ -1,21 +1,35 @@
-package sign
+package main
 
 import (
-	jwt "github.com/dgrijalva/jwt-go"
+	"encoding/json"
 	"fmt"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 type User struct {
-	email string `json:"email"`
-	password string `json:"password"`
-	source string `json:"source"`
+	UserId   string `json:"userId"`
+	Password string `json:"password"`
+	Source   string `json:"source"`
 }
 
-func Handler (ctx context.Context) (Response, error) {
-	var body = ctx.body
-	var user = &User{body}
+type Response events.APIGatewayProxyResponse
 
-	if !strings.Contains(user.email, "@") Response{StatusCode: 500, Body: "Email address is required"}
-	if len(user.password) < 4 Response{StatusCode: 500, Body: "Password must have at least 4 characters"}
-	if user.source == nil Response{StatusCode: 500, Body: "Source is required"}
+func Handler(req events.APIGatewayProxyRequest) (Response, error) {
+	var user User
+	json.Unmarshal([]byte(req.Body), &user)
+
+	fmt.Println("user", user)
+	// var body = ctx.body
+
+	// if !strings.Contains(user.email, "@") Response{StatusCode: 500, Body: "Email address is required"}
+	// if len(user.password) < 4 Response{StatusCode: 500, Body: "Password must have at least 4 characters"}
+	// if user.source == nil Response{StatusCode: 500, Body: "Source is required"}
+
+	return Response{StatusCode: 200, Body: "Hello"}, nil
+}
+
+func main() {
+	lambda.Start(Handler)
 }

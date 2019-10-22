@@ -21,50 +21,50 @@ provider:
     PWD_DB:
 
 functions:
-  verify:
-    handler: src/interface/authentication.verify
+  # verify:
+  #   handler: src/interface/authentication.verify
   sign:
     handler: src/interface/authentication.sign
     events:
       - http:
         path: sign
         method: POST
-  xChangeBitcoin:
-    handler: src/interface/bitcoin.xChangeHandler
-    events:
-      - http:
-        path: xChangeBitcoin
-        method: GET
-      - http:
-        path: xChangeBitcoin
-        method: POST
-      - http:
-        path: /
-        method: GET
-        authorizer:
-          name: authorize
-          resultTtlInSeconds: 0
-      - http:
-        path: /
-        method: POST
-        authorizer:
-          name: authorize
-          resultTtlInSeconds: 0
+#   xChangeBitcoin:
+#     handler: src/interface/bitcoin.xChangeHandler
+#     events:
+#       - http:
+#         path: xChangeBitcoin
+#         method: GET
+#       - http:
+#         path: xChangeBitcoin
+#         method: POST
+#       - http:
+#         path: /
+#         method: GET
+#         authorizer:
+#           name: authorize
+#           resultTtlInSeconds: 0
+#       - http:
+#         path: /
+#         method: POST
+#         authorizer:
+#           name: authorize
+#           resultTtlInSeconds: 0
 
-resources:
-  Resources:
-    registerUsers:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: "user_id"
-            AttributeType: "S"            
-        KeySchema:
-          -
-            AttributeName: "user_id"
-            KeyType: "HASH"        
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.REGISTER_USERS} 
+# resources:
+#   Resources:
+#     registerUsers:
+#       Type: 'AWS::DynamoDB::Table'
+#       Properties:
+#         AttributeDefinitions:
+#           -
+#             AttributeName: "user_id"
+#             AttributeType: "S"            
+#         KeySchema:
+#           -
+#             AttributeName: "user_id"
+#             KeyType: "HASH"        
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
+#         TableName: ${self:provider.environment.REGISTER_USERS} 

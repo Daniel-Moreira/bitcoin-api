@@ -2,6 +2,7 @@
 
 build:
 	dep ensure -v
+	go install bitcoin-api/src/customtypes
 	env GOOS=linux go build -ldflags="-s -w" -o bin/sign src/interface/authentication/sign.go
 
 clean:

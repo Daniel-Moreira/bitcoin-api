@@ -1,18 +1,13 @@
 package main
 
 import (
+	. "bitcoin-api/src/customtypes"
 	"encoding/json"
 	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
-
-type User struct {
-	UserId   string `json:"userId"`
-	Password string `json:"password"`
-	Source   string `json:"source"`
-}
 
 type Response events.APIGatewayProxyResponse
 

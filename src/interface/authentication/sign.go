@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	. "bitcoin-api/src/domain"
 	. "bitcoin-api/src/customtypes"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -23,15 +24,7 @@ func Handler(req events.APIGatewayProxyRequest) (Response, error) {
 
 	fmt.Println(string(stringU))
 
-	// if !strings.Contains(user.UserID, "@") {
-	// 	return Response{StatusCode: 500, Body: "Email address is required"}, nil
-	// }
-	// if len(user.Password) < 4 {
-	// 	return Response{StatusCode: 500, Body: "Password must have at least 4 characters"}, nil
-	// }
-	// if user.Source == "" {
-	// 	return Response{StatusCode: 500, Body: "Source is required"}, nil
-	// }
+	sign(user)
 
 	return Response{
 		StatusCode: 200,

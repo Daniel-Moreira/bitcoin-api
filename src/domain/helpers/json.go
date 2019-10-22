@@ -1,11 +1,14 @@
-package json
+package helpers
 
 import "encoding/json"
 
-func toJson() {
-	json.Unmarshal([]byte(req.Body), &user)
+func toJson(from interface{}, *to interface{}) err error {
+	err := json.Unmarshal([]byte(from), &to)
+	return err
 }
 
-func toString() {
-	stringU, _ := json.Marshal(user)
+func toString(object interface{}) (jsonString string, err error) {
+	jsonData, err := json.Marshal(object)
+
+	return string(jsonData), err
 }

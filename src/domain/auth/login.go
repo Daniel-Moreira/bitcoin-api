@@ -32,6 +32,9 @@ package auth
 //     return nil, errors.New("User passaword doesn't match!")
 //   }
 
+	// if user.Source == "" {
+	// 	return events.APIGatewayProxyResponse{StatusCode: 500, Body: "Source is required"}, nil
+	// }
 //   jwtToken := generateJwtToken(user)
 
 //   return jwtToken, nil

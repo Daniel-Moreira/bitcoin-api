@@ -11,7 +11,6 @@ import (
 func client() *dynamodb.DynamoDB {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("REGION")),
-		// SharedConfigState: session.SharedConfigEnable,
 	}))
 
 	dynamoClient := dynamodb.New(sess)

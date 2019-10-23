@@ -10,23 +10,21 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-func Sign(user User) (events.APIGatewayProxyResponse, error) {
-	if len(user.UserID) < 4 {
-		return events.APIGatewayProxyResponse{StatusCode: 500, Body: "UserID must have at least 4 characters"}, nil
-	}
-	if len(user.Password) < 4 {
-		return events.APIGatewayProxyResponse{StatusCode: 500, Body: "Password must have at least 4 characters"}, nil
-	}
-	// if user.Source == "" {
-	// 	return events.APIGatewayProxyResponse{StatusCode: 500, Body: "Source is required"}, nil
-	// }
+func Sign(user User) (string, error) {
+  validUser := Validate(user)
 
-	fmt.Println(os.Getenv("REGISTER_USERS"))
-	addedUser := Put(user, os.Getenv("REGISTER_USERS"))
+  if validUser != nil {
+    return validUser, nil
+  }
 
-	if addedUser == false {
-		return events.APIGatewayProxyResponse{StatusCode: 200, Body: "User already registered!"}, nil
+	err := Put(user, os.Getenv("REGISTER_USERS"))
+
+	if err != nil {
+    if err == somethin {
+      return "User already register!", err
+    }
+		return nil, err
 	}
 
-	return events.APIGatewayProxyResponse{StatusCode: 200, Body: "Account Created!"}, nil
+	return "Account Created!", nil
 }

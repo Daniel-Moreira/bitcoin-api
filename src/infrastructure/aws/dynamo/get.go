@@ -16,6 +16,7 @@ func get(user User, TableName string) *User {
 	keyMap, err := dynamodbattribute.MarshalMap(user.UserID)
 	if err != nil {
 		panic("Cannot marshal UserID into AttributeValue map")
+		return nil
 	}
 
 	params := &dynamodb.GetItemInput{

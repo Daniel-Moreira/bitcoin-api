@@ -10,27 +10,26 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-func Put(user User, TableName string) bool {
+func Put(user User, TableName string) error {
 	dynamoClient := client()
 
 	userMap, err := dynamodbattribute.MarshalMap(user)
 	if err != nil {
 		panic("Cannot marshal user into AttributeValue map")
-		return false
+		return err
 	}
 
 	params := &dynamodb.PutItemInput{
 		TableName:           aws.String(TableName),
 		Item:                userMap,
 		ConditionExpression: aws.String("attribute_not_exists(userId)"),
-		// ReturnValues:        aws.String("UPDATED_NEW"),
 	}
 
 	result, err := dynamoClient.PutItem(params)
 	if err != nil {
 		fmt.Printf("ERROR: %v\n", err.Error())
-		return false
+		return  err
 	}
 
-	return true
+	return nil
 }

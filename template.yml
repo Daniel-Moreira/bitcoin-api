@@ -17,3 +17,14 @@ Resources:
         Variables:
           REGISTER_USERS: register-users-dev
           REGION: sa-east-1
+  login:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: bin/login
+      Runtime: go1.x
+      Events:
+        Vote:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: POST

@@ -1,34 +1,56 @@
 service: bitcoin-api
 
-plugins:
-  - serverless-offline
+frameworkVersion: ">=1.28.0 <2.0.0"
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
 
 provider:
   name: aws
   runtime: go1.x
   stage: dev
-  region: us-east-1
-  versionLambda: false
+  region: sa-east-1
 
   environment:
     SERVICE: ${self:service}-${opt:stage, self:provider.stage}
     REGION: ${self:provider.region}
     REGISTER_USERS: register-users-${opt:stage, self:provider.stage}
     TRACK_HISTORY_DB: bitcoin-track-history-${opt:stage, self:provider.stage}
-    HOST_DB:
-    USER_DB:
-    PORT_DB:
-    PWD_DB:
+    # HOST_DB:
+    # USER_DB:
+    # PORT_DB:
+    # PWD_DB:
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+      - dynamodb:GetItem
+      - dynamodb:Query
+      - dynamodb:DeleteItem 
+      - dynamodb:UpdateItem
+      - dynamodb:PutItem
+      Resource: ['*']
+    - Effect: Allow
+      Action:
+      - lambda:InvokeFunction
+      Resource: ["*"]
 
 functions:
-  # verify:
-  #   handler: src/interface/authentication.verify
+  login:
+    handler: src/interface/authentication.login
+    events:
+      - http:
+          path: login
+          method: GET
   sign:
     handler: src/interface/authentication.sign
     events:
       - http:
-        path: sign
-        method: POST
+          path: sign
+          method: POST
 #   xChangeBitcoin:
 #     handler: src/interface/bitcoin.xChangeHandler
 #     events:
@@ -51,20 +73,20 @@ functions:
 #           name: authorize
 #           resultTtlInSeconds: 0
 
-# resources:
-#   Resources:
-#     registerUsers:
-#       Type: 'AWS::DynamoDB::Table'
-#       Properties:
-#         AttributeDefinitions:
-#           -
-#             AttributeName: "user_id"
-#             AttributeType: "S"            
-#         KeySchema:
-#           -
-#             AttributeName: "user_id"
-#             KeyType: "HASH"        
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
-#         TableName: ${self:provider.environment.REGISTER_USERS} 
+resources:
+  Resources:
+    registerUsers:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "userId"
+            AttributeType: "S"            
+        KeySchema:
+          -
+            AttributeName: "userId"
+            KeyType: "HASH"        
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.REGISTER_USERS}

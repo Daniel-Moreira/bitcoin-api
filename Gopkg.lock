@@ -8,14 +8,19 @@
   version = "v1.13.2"
 
 [[projects]]
-  name = "github.com/dgrijalva/jwt-go"
+  name = "github.com/aws/aws-sdk-go"
+  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/crr","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/sdkio","internal/sdkmath","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/json/jsonutil","private/protocol/jsonrpc","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/dynamodb","service/dynamodb/dynamodbattribute","service/sts","service/sts/stsiface"]
+  revision = "ee35eb7f829b84db98fd3c404bf9b5407e3cb653"
+  version = "v1.25.17"
+
+[[projects]]
+  name = "github.com/jmespath/go-jmespath"
   packages = ["."]
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
+  revision = "c2b33e84"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "efc328fee83cc1d48c6ba1461b7329503e3f71b27d2184f428eca0a1650d7efc"
+  inputs-digest = "e0f9998461f198e8f464ecf7c54ea2af7713796abbb67dfd432209854ba2a658"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -13,7 +13,7 @@ Resources:
           Properties:
             Path: /sign
             Method: POST
-      # Environment:
-      #   Variables:
-      #     api_key:
-      #     BUCKET_NAME:
+      Environment:
+        Variables:
+          REGISTER_USERS: register-users-dev
+          REGION: sa-east-1

@@ -7,5 +7,8 @@ build:
 clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 
+offline: build
+	sam local start-api
+
 deploy: clean build
-	sls deploy --verbose
+	sls deploy --stage dev

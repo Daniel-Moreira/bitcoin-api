@@ -14,15 +14,15 @@ func Sign(user User) (string, error) {
   validUser := Validate(user)
 
   if validUser != nil {
-    return validUser, nil
+    return nil, errors.new{validUser}
   }
 
 	err := Put(user, os.Getenv("REGISTER_USERS"))
 
 	if err != nil {
-    if err == somethin {
-      return "User already register!", err
-    }
+    // if err == somethin {
+    //   return nil, errors.New{"User already register!"}
+    // }
 		return nil, err
 	}
 

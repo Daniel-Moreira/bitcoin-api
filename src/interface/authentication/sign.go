@@ -23,7 +23,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 
 	resp, err := Sign(user)
 
-	return resp, err
+	return BuildResponse(201, resp), err
 }
 
 func main() {

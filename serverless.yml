@@ -19,6 +19,8 @@ provider:
     REGION: ${self:provider.region}
     REGISTER_USERS: register-users-${opt:stage, self:provider.stage}
     TRACK_HISTORY_DB: bitcoin-track-history-${opt:stage, self:provider.stage}
+    PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
+    BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
     # HOST_DB:
     # USER_DB:
     # PORT_DB:
@@ -29,7 +31,7 @@ provider:
       Action:
       - dynamodb:GetItem
       - dynamodb:Query
-      - dynamodb:DeleteItem 
+      - dynamodb:DeleteItem
       - dynamodb:UpdateItem
       - dynamodb:PutItem
       Resource: ['*']
@@ -81,11 +83,11 @@ resources:
         AttributeDefinitions:
           -
             AttributeName: "userId"
-            AttributeType: "S"            
+            AttributeType: "S"
         KeySchema:
           -
             AttributeName: "userId"
-            KeyType: "HASH"        
+            KeyType: "HASH"
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

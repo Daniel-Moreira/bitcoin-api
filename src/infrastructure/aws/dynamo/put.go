@@ -1,21 +1,21 @@
 package dynamo
 
 import (
+	"errors"
 	"fmt"
 
-	. "bitcoin-api/src/customtypes"
-
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-func Put(user User, TableName string) error {
+func Put(TableName string, data interface{}) error {
 	dynamoClient := client()
 
-	userMap, err := dynamodbattribute.MarshalMap(user)
+	userMap, err := dynamodbattribute.MarshalMap(data)
 	if err != nil {
-		panic("Cannot marshal user into AttributeValue map")
+		panic("Cannot marshal data into AttributeValue map")
 		return err
 	}
 
@@ -27,9 +27,16 @@ func Put(user User, TableName string) error {
 
 	result, err := dynamoClient.PutItem(params)
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err.Error())
-		return  err
+		awsErr := err.(awserr.Error)
+
+		if awsErr.Code() == "ConditionalCheckFailedException" {
+			return errors.New("User already register")
+		}
+
+		return err
 	}
+
+	fmt.Println(result)
 
 	return nil
 }

@@ -14,6 +14,12 @@
   version = "v1.25.17"
 
 [[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   revision = "c2b33e84"
@@ -21,6 +27,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e0f9998461f198e8f464ecf7c54ea2af7713796abbb67dfd432209854ba2a658"
+  inputs-digest = "7ca5a5e863915a9e07c3531642606e6c52dbe0ebd3d07c1e24b1a14d669b35ac"
   solver-name = "gps-cdcl"
   solver-version = 1

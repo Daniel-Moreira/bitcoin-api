@@ -1,22 +1,20 @@
 package dynamo
 
 import (
+	"errors"
 	"fmt"
-
-	. "bitcoin-api/src/customtypes"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-func get(user User, TableName string) *User {
+func Get(TableName string, key map[string]string, resultData interface{}) error {
 	dynamoClient := client()
 
-	keyMap, err := dynamodbattribute.MarshalMap(user.UserID)
+	keyMap, err := dynamodbattribute.MarshalMap(key)
 	if err != nil {
-		panic("Cannot marshal UserID into AttributeValue map")
-		return nil
+		return fmt.Errorf("Cannot marshal %s into AttributeValue map", key)
 	}
 
 	params := &dynamodb.GetItemInput{
@@ -26,20 +24,13 @@ func get(user User, TableName string) *User {
 
 	result, err := dynamoClient.GetItem(params)
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err.Error())
-		return nil
+		return err
 	}
 
-	resultUser := User{}
-
-	err = dynamodbattribute.UnmarshalMap(result.Item, &resultUser)
+	err = dynamodbattribute.UnmarshalMap(result.Item, resultData)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
-		return nil
+		return errors.New("Failed to unmarshal Record" + err.Error())
 	}
 
-	fmt.Println("Success")
-	fmt.Println(resultUser)
-
-	return &resultUser
+	return nil
 }

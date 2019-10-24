@@ -2,6 +2,22 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A hello world application.
 Resources:
+  login:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: bin/login
+      Runtime: go1.x
+      Events:
+        Vote:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: GET
+      Environment:
+        Variables:
+          REGISTER_USERS: register-users-dev
+          REGION: sa-east-1
+          PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
   sign:
     Type: AWS::Serverless::Function
     Properties:
@@ -17,14 +33,5 @@ Resources:
         Variables:
           REGISTER_USERS: register-users-dev
           REGION: sa-east-1
-  login:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: bin/login
-      Runtime: go1.x
-      Events:
-        Vote:
-          Type: Api
-          Properties:
-            Path: /login
-            Method: POST
+          PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
+

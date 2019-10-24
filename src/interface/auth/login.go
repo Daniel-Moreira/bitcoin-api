@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	. "bitcoin-api/src/customtypes"
 	. "bitcoin-api/src/domain/auth"
@@ -17,13 +16,22 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	var user User
 	json.Unmarshal([]byte(req.Body), &user)
 
-	stringU, _ := json.Marshal(user)
+	// Source prob will need to change
+	source := req.RequestContext.Identity.SourceIP
 
-	fmt.Println(string(stringU))
+	resp, err := Login(user, source)
 
-	resp, err := Sign(user)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       err.Error(),
+		}, nil
+	}
 
-	return BuildResponse(201, resp), err
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Body:       string(resp),
+	}, nil
 }
 
 func main() {

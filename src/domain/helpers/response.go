@@ -1,27 +1,12 @@
 package helpers
 
+import "github.com/aws/aws-lambda-go/events"
+
 type Response events.APIGatewayProxyResponse
 
-func BuildResponse (StatusCode int, payload interface{}) Response {
-  if StatusCode == nil || payload == nil {
-    return nil
-  }
-
+func BuildResponse(StatusCode int, payload string) Response {
 	return Response{
 		StatusCode: StatusCode,
-		Body: ToString(payload)
-	}
-}
-
-func BuildResponse (StatusCode int, msg string) Response {
-  if StatusCode == nil || msg == nil {
-    return nil
-  }
-  
-	return Response{
-		StatusCode: StatusCode,
-		Body: map[string]string{
-			"Message": msg
-		}
+		Body:       payload,
 	}
 }

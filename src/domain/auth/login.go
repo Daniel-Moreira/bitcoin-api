@@ -1,41 +1,54 @@
 package auth
 
-// import (
-// 	jwt "github.com/dgrijalva/jwt-go"
-// 	"fmt"
-// )
+import (
+	"bitcoin-api/src/infrastructure/aws/dynamo"
+	"errors"
+	"os"
 
-// func generateJwtToken (user User) (string) {
-// 	const jwtMethod = jwt.GetSigningMethod("HS256")
-// 	const claims = &jwt.StandardClaims{
-// 		Subject: user.UserID
-// 		ExpiresAt: 15000,
-//    	Issuer: user.source
-// 	}
+	. "bitcoin-api/src/customtypes"
 
-// 	const token = jwt.NewWithClaims(jwtMethod, claims)
-// 	const signToken = token.SignedToken(user.password)
+	jwt "github.com/dgrijalva/jwt-go"
+)
 
-//   fmt.Println("token %v", signToken)
+func generateJwtToken(user User, source string) (string, error) {
+	jwtMethod := jwt.GetSigningMethod("HS256")
+	claims := &jwt.StandardClaims{
+		Subject:   user.UserID,
+		ExpiresAt: 15000,
+		Issuer:    source,
+	}
 
-//   return signToken
-// }
+	token := jwt.NewWithClaims(jwtMethod, claims)
+	signToken, err := token.SignedString([]byte(os.Getenv("PRIVATE_KEY")))
 
-// func login (user User) (string, error) {
-//   // match password
-//   savedPass := dynamo.get(user.UserID)
+	if err != nil {
+		return "", err
+	}
 
-//   if savedPass == nil {
-//     return nil, errors.New("Unregistered user!")
-//   }
-//   else if savedPass != user.password {
-//     return nil, errors.New("User passaword doesn't match!")
-//   }
+	return signToken, nil
+}
 
-	// if user.Source == "" {
-	// 	return events.APIGatewayProxyResponse{StatusCode: 500, Body: "Source is required"}, nil
-	// }
-//   jwtToken := generateJwtToken(user)
+func Login(user User, source string) (string, error) {
+	if source == "" {
+		return "", errors.New("Source is required")
+	}
 
-//   return jwtToken, nil
-// }
+	savedUser := User{}
+	err := dynamo.Get(os.Getenv("REGISTER_USERS"), map[string]string{"userId": user.UserID}, &savedUser)
+
+	if err != nil {
+		return "", err
+	}
+
+	if savedUser.Password != user.Password {
+		return "", errors.New("User passaword doesn't match!")
+	}
+
+	jwtToken, err := generateJwtToken(user, source)
+
+	if err != nil {
+		return "", err
+	}
+
+	return jwtToken, nil
+}

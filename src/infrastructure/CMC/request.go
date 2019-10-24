@@ -31,14 +31,20 @@ func GetBitcoinData() error {
 		return err
 	}
 
-	json.NewDecoder(resp.Body).Decode()
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
 	bodyString := string(respBody)
 
+	var result map[string]interface{}
+	json.Unmarshal([]byte(empJson), &result)
+	data := result["data"].(map[string]interface{})
+	one := data["1"].(map[string]interface{})
+	quote := one["quote"].(map[string]interface{})
+	usd := quote["USD"].(map[string]interface{})
+
 	now := time.Now()
 	afterTime := now.Add(time.Minute * 15)
 
-	cache.Put("BITCOIN_PRICE", "1")
+	cache.Put("BITCOIN_PRICE", usd["price"])
 	cache.Put("BITCOIN_EXP", afterTime.String())
 }

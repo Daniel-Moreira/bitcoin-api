@@ -9,4 +9,4 @@ type Account struct {
 type User struct {
 	UserID   string `json:"userId"`
 	Password string `json:"password"`
-}1
+}

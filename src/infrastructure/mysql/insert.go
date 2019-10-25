@@ -43,7 +43,7 @@ func Insert(command InsertCommand) (error) {
     return err
   }
 
-  res, err := stmt.Exec(vals...)
+  _, err := stmt.Exec(vals...)
 
   if err != nil {
     return err

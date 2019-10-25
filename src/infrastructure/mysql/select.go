@@ -21,9 +21,10 @@ func Select(command SelectCommand) (error) {
   projectionString := strings.Join(command.Projection, ", ")
 
 	queryString := fmt.Sprintf(
-    "SELECT %s FROM %s WHERE %s;",
+    "SELECT %s FROM %s %s WHERE %s;",
     projectionString,
     command.TableName,
+    command.Join,
     command.Conditions
   )
   rows, err := db.Query(queryString, ConditionData...)

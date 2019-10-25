@@ -8,7 +8,7 @@ Resources:
       Handler: bin/login
       Runtime: go1.x
       Events:
-        Vote:
+        login:
           Type: Api
           Properties:
             Path: /login
@@ -24,7 +24,7 @@ Resources:
       Handler: bin/sign
       Runtime: go1.x
       Events:
-        Vote:
+        sign:
           Type: Api
           Properties:
             Path: /sign
@@ -34,4 +34,14 @@ Resources:
           REGISTER_USERS: register-users-dev
           REGION: sa-east-1
           PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
+  register:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+    TableName: register-users-dev
+    PrimaryKey:
+      Name: userId
+      Type: String
+    ProvisionedThroughput:
+      ReadCapacityUnits: 5
+      WriteCapacityUnits: 5
 

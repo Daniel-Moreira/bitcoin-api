@@ -21,10 +21,11 @@ provider:
     TRACK_HISTORY_DB: bitcoin-track-history-${opt:stage, self:provider.stage}
     PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
     BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
-    # HOST_DB:
-    # USER_DB:
-    # PORT_DB:
-    # PWD_DB:
+    MYSQL_HOST: db
+    MYSQL_DATABASE: db
+    MYSQL_USER: gouser
+    MYSQL_PASSWORD: gouser@)@<_U2
+    MYSQL_PORT: 3306
 
   iamRoleStatements:
     - Effect: Allow

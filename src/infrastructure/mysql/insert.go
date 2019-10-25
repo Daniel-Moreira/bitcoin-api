@@ -3,21 +3,24 @@ package mysql
 import (
 	"fmt"
 	"reflect"
-	"strings"
+  "strings"
+
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type SQLCommand struct {
-  TableName string,
-  Data []interface{},
-}
+func Insert(command InsertCommand) (error) {
+  db, err := client()
 
-func Insert(command SQLCommand) {
-  // db, err := sql.Open("mysql", "user:pass@tcp(dns)/dbname")
+  defer db.Close()
+
+  if err != nil {
+    return err
+  }
+
 	columns := reflect.ValueOf(command.Data[0]).MapKeys()
   columnsString := strings.Join(columns, ", ")
-  
+
   var vals []interface{}{}
   rowString := fmt.Sprintf("(%s),", (strings.Repeat("?, ", len(columns)-1) + "?"))
   for _, row := range command.Data {
@@ -28,14 +31,23 @@ func Insert(command SQLCommand) {
   }
   valuesString = valuesString[0:len(valuesString)-1]
 
-  strings.Join(command.Data
 	queryString := fmt.Sprintf(
-    "INSERT INTO %s(%s) VALUES %s",
+    "INSERT INTO %s(%s) VALUES %s;",
     command.tableName,
     columnsString,
     valuesString
   )
-	stmt, err := db.Prepare(queryString)
+  stmt, err := db.Prepare(queryString)
 
-	res, err := stmt.Exec(vals...)
+  if err != nil {
+    return err
+  }
+
+  res, err := stmt.Exec(vals...)
+
+  if err != nil {
+    return err
+  }
+
+  return nil
 }

@@ -1,0 +1,10 @@
+{
+  "name": "package-name",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless-offline": "^5.12.0"
+  }
+}

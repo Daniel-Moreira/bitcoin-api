@@ -9,6 +9,7 @@ clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 
 offline: build
+  npm i
 	sls offline
 
 deploy: clean build

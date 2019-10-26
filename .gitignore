@@ -6,6 +6,7 @@ api/bin
 
 # golang vendor (dependencies) directory
 api/vendor
+api/node_modules
 
 # Binaries for programs and plugins
 api/*.exe

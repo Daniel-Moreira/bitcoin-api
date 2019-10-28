@@ -3,8 +3,8 @@ package auth
 import (
 	"os"
 
-	"bitcoin-api/src/infrastructure/mysql"
-	. "bitcoin-api/src/customtypes"
+	. "bitcoin-api-docker/api/src/customtypes"
+	"bitcoin-api-docker/api/src/infrastructure/mysql"
 )
 
 func Sign(account Account) (map[string]string, error) {
@@ -14,12 +14,12 @@ func Sign(account Account) (map[string]string, error) {
 		return nil, err
 	}
 
-  command := mysql.InsertCommand{
-    TableName: os.Getenv("REGISTER_USERS"),
-    Data: account
-  }
+	command := mysql.InsertCommand{
+		TableName: os.Getenv("USERS_DB"),
+	}
+	command.Data = append(command.Data, account)
 
-	err = mysql.insert(command)
+	err = mysql.Insert(command)
 
 	if err != nil {
 		return nil, err

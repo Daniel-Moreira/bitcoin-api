@@ -2,52 +2,59 @@ package mysql
 
 import (
 	"fmt"
-	"reflect"
-  "strings"
+	"strings"
 
-	"database/sql"
+	"github.com/fatih/structs"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Insert(command InsertCommand) (error) {
-  db, err := client()
+func Insert(command InsertCommand) error {
+	db, err := client()
 
-  defer db.Close()
+	defer db.Close()
 
-  if err != nil {
-    return err
-  }
+	if err != nil {
+		return err
+	}
 
-	columns := reflect.ValueOf(command.Data[0]).MapKeys()
-  columnsString := strings.Join(columns, ", ")
+	data := structs.Map(command.Data[0])
+	columnsString := ""
+	for key, _ := range data {
+		columnsString += fmt.Sprintf("%s, ", key)
+	}
+	columnsString = columnsString[0 : len(columnsString)-2]
 
-  var vals []interface{}{}
-  rowString := fmt.Sprintf("(%s),", (strings.Repeat("?, ", len(columns)-1) + "?"))
-  for _, row := range command.Data {
-    valuesString += rowString
-    for _, v := range row {
-      vals = append(vals, v)
-    }
-  }
-  valuesString = valuesString[0:len(valuesString)-1]
+	var vals []interface{}
+	valuesString := ""
+	rowString := fmt.Sprintf("(%s),", (strings.Repeat("?, ", len(data)-1) + "?"))
+	for i := 0; i < len(command.Data); i++ {
+		valuesString += rowString
+
+		rowMap := structs.Map(command.Data[i])
+		for _, v := range rowMap {
+			vals = append(vals, v)
+		}
+	}
+	valuesString = valuesString[0 : len(valuesString)-1]
 
 	queryString := fmt.Sprintf(
-    "INSERT INTO %s(%s) VALUES %s;",
-    command.tableName,
-    columnsString,
-    valuesString
-  )
-  stmt, err := db.Prepare(queryString)
+		"INSERT INTO %s(%s) VALUES %s;",
+		command.TableName,
+		columnsString,
+		valuesString,
+	)
+	stmt, err := db.Prepare(queryString)
 
-  if err != nil {
-    return err
-  }
+	fmt.Println(queryString)
+	if err != nil {
+		return err
+	}
 
-  _, err := stmt.Exec(vals...)
+	_, err = stmt.Exec(vals...)
 
-  if err != nil {
-    return err
-  }
+	if err != nil {
+		return err
+	}
 
-  return nil
+	return nil
 }

@@ -1,19 +1,20 @@
 package auth
 
 import (
-  "errors"
+	"errors"
+	"fmt"
 	"os"
 
-	"bitcoin-api/src/infrastructure/mysql"
-	. "bitcoin-api/src/customtypes"
+	. "bitcoin-api-docker/api/src/customtypes"
+	"bitcoin-api-docker/api/src/infrastructure/mysql"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func generateJwtToken(user User, source string) (string, error) {
+func generateJwtToken(account Account, source string) (string, error) {
 	jwtMethod := jwt.GetSigningMethod("HS256")
 	claims := &jwt.StandardClaims{
-		Subject:   user.UserID,
+		Subject:   account.UserID,
 		ExpiresAt: 15000,
 		Issuer:    source,
 	}
@@ -28,30 +29,30 @@ func generateJwtToken(user User, source string) (string, error) {
 	return signToken, nil
 }
 
-func Login(user User, source string) (string, error) {
+func Login(account Account, source string) (string, error) {
 	if source == "" {
 		return "", errors.New("Source is required")
 	}
 
-  command := mysql.SelectCommand{
-    TableName: os.Getenv("REGISTER_USERS"),
-    Projection: ["password"],
-    Join: mysql.Join.None,
-    Conditions: mysql.Conditions.User,
-    ConditionData [user.UserID],
-  }
+	command := mysql.SelectCommand{
+		TableName:     os.Getenv("USERS_DB"),
+		Projection:    []string{"password"},
+		Join:          mysql.NONE,
+		Conditions:    mysql.USER,
+		ConditionData: []string{account.UserID},
+	}
 	result, err := mysql.Select(command)
 
 	if err != nil {
 		return "", err
 	}
 
-  fmt.Println(result["password"])
-	if result["password"] != user.Password {
+	fmt.Println(result[0]["password"])
+	if result[0]["password"] != account.Password {
 		return "", errors.New("User passaword doesn't match!")
 	}
 
-	jwtToken, err := generateJwtToken(user, source)
+	jwtToken, err := generateJwtToken(account, source)
 
 	if err != nil {
 		return "", err

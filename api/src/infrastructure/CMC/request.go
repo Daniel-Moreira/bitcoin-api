@@ -36,7 +36,7 @@ func GetBitcoinData() (string, error) {
 	bodyString := string(respBody)
 
 	var result map[string]interface{}
-	json.Unmarshal([]byte(empJson), &result)
+	json.Unmarshal(respBody, &result)
 	data := result["data"].(map[string]interface{})
 	one := data["1"].(map[string]interface{})
 	quote := one["quote"].(map[string]interface{})

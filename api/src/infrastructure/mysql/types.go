@@ -1,27 +1,27 @@
 package mysql
 
 type InsertCommand struct {
-  TableName string,
-  Data []interface{},
+	TableName string
+	Data      []interface{}
 }
 
 type SelectCommand struct {
-  TableName string,
-  Projection []string,
-  Join Join
-  Conditions Conditions,
-  ConditionData []string,
+	TableName     string
+	Projection    []string
+	Join          Join
+	Conditions    Conditions
+	ConditionData []string
 }
 
 type Join string
 type Conditions string
 
 const (
-  BitCoin Join = "RIGHT JOIN coins ON user.userId = coins.userId"
-  None Join = ""
+	BITCOIN Join = "RIGHT JOIN coins ON user.userId = coins.userId"
+	NONE    Join = ""
 )
 
 const (
-  User Conditions = "userId = ?"
-  Day Conditions = "date = ?"
+	USER Conditions = "userId = ?"
+	DAY  Conditions = "date = ?"
 )

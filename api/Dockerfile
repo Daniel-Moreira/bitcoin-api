@@ -1,6 +1,6 @@
 FROM golang:latest
 
-WORKDIR /go/src/bitcoin-api
+WORKDIR /go/src/bitcoin-api-docker/api
 
 ADD https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 /usr/bin/dep
 RUN chmod +x /usr/bin/dep
@@ -15,8 +15,10 @@ RUN apt-get update && \
     npm install npm@latest -g
 
 # Install packages
-RUN npm i serverless -g
-RUN npm i
+# RUN npm i serverless -g
+RUN npm config set unsafe-perm=true
+RUN npm i aws-sam-local -g
+# RUN npm i
 
 # Install dynamodb local
 # RUN sls dynamodb install
@@ -43,4 +45,4 @@ ENV AWS_SECRET_ACCESS_KEY teste
 
 EXPOSE 3000
 
-CMD ["sls", "offline", "start"]
+CMD ["sam", "local", "start-api", "--host", "0.0.0.0"]

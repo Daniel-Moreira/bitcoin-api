@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 
-	. "bitcoin-api/src/customtypes"
-	. "bitcoin-api/src/domain/auth"
+	. "bitcoin-api-docker/api/src/customtypes"
+	"bitcoin-api-docker/api/src/domain/auth"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -13,13 +13,13 @@ import (
 // type Response events.APIGatewayProxyResponse
 
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var user User
-	json.Unmarshal([]byte(req.Body), &user)
+	var account Account
+	json.Unmarshal([]byte(req.Body), &account)
 
 	// Source prob will need to change
 	source := req.RequestContext.Identity.SourceIP
 
-	resp, err := Login(user, source)
+	resp, err := auth.Login(account, source)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{

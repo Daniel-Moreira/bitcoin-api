@@ -3,15 +3,15 @@ package auth
 import (
 	"errors"
 
-	. "bitcoin-api/src/customtypes"
+	. "bitcoin-api-docker/api/src/customtypes"
 )
 
-func Validate(user User) error {
+func Validate(account Account) error {
 	var result string
-	if len(user.UserID) < 4 {
+	if len(account.UserID) < 4 {
 		result = "UserID must have at least 4 characters\n"
 	}
-	if len(user.Password) < 4 {
+	if len(account.Password) < 4 {
 		result += "Password must have at least 4 characters\n"
 	}
 

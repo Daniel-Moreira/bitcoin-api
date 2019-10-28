@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"bitcoin-api/src/infrastructure/aws/dynamo"
-	"errors"
+  "errors"
 	"os"
 
+	"bitcoin-api/src/infrastructure/mysql"
 	. "bitcoin-api/src/customtypes"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -33,14 +33,21 @@ func Login(user User, source string) (string, error) {
 		return "", errors.New("Source is required")
 	}
 
-	savedUser := User{}
-	err := dynamo.Get(os.Getenv("REGISTER_USERS"), map[string]string{"userId": user.UserID}, &savedUser)
+  command := mysql.SelectCommand{
+    TableName: os.Getenv("REGISTER_USERS"),
+    Projection: ["password"],
+    Join: mysql.Join.None,
+    Conditions: mysql.Conditions.User,
+    ConditionData [user.UserID],
+  }
+	result, err := mysql.Select(command)
 
 	if err != nil {
 		return "", err
 	}
 
-	if savedUser.Password != user.Password {
+  fmt.Println(result["password"])
+	if result["password"] != user.Password {
 		return "", errors.New("User passaword doesn't match!")
 	}
 

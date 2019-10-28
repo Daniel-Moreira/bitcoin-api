@@ -3,18 +3,23 @@ package auth
 import (
 	"os"
 
+	"bitcoin-api/src/infrastructure/mysql"
 	. "bitcoin-api/src/customtypes"
-	. "bitcoin-api/src/infrastructure/aws/dynamo"
 )
 
-func Sign(user User) (map[string]string, error) {
-	err := Validate(user)
+func Sign(account Account) (map[string]string, error) {
+	err := Validate(account)
 
 	if err != nil {
 		return nil, err
 	}
 
-	err = Put(os.Getenv("REGISTER_USERS"), user)
+  command := mysql.InsertCommand{
+    TableName: os.Getenv("REGISTER_USERS"),
+    Data: account
+  }
+
+	err = mysql.insert(command)
 
 	if err != nil {
 		return nil, err

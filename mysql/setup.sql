@@ -6,7 +6,7 @@ CREATE TABLE Users (
 )
 
 CREATE TABLE Transactions (
-  TransactionId   INT PRIMARY KEY AUTO_INCREMENT       NOT NULL,     
+  TransactionId   INT PRIMARY KEY AUTO_INCREMENT       NOT NULL,
   UserId          FOREIGN KEY REFERENCES Users(UserId) NOT NULL,
   Type            VARCHAR(10)                          NOT NULL,
   Amount          DOUBLE                               NULL,

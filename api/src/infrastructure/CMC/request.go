@@ -11,12 +11,12 @@ import (
 	cache "src/domain/cache"
 )
 
-func GetBitcoinData() error {
+func GetBitcoinData() (string, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest", nil)
 
 	if err != nil {
-		return err
+		return '', err
 	}
 
 	q := url.Values{}
@@ -28,7 +28,7 @@ func GetBitcoinData() error {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return '', err
 	}
 
 	respBody, _ := ioutil.ReadAll(resp.Body)
@@ -42,9 +42,5 @@ func GetBitcoinData() error {
 	quote := one["quote"].(map[string]interface{})
 	usd := quote["USD"].(map[string]interface{})
 
-	now := time.Now()
-	afterTime := now.Add(time.Minute * 15)
-
-	cache.Put("BITCOIN_PRICE", usd["price"])
-	cache.Put("BITCOIN_EXP", afterTime.String())
+	return usd["price"], nil
 }

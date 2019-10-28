@@ -20,8 +20,8 @@ provider:
   environment:
     SERVICE: ${self:service}-${opt:stage, self:provider.stage}
     REGION: ${self:provider.region}
-    REGISTER_USERS: users-${opt:stage, self:provider.stage}
-    TRACK_HISTORY_DB: bitcoin-track-${opt:stage, self:provider.stage}
+    USERS_DB: users-${opt:stage, self:provider.stage}
+    TRANSACTIONS_DB: transactions-${opt:stage, self:provider.stage}
     PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
     BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
     MYSQL_HOST: db

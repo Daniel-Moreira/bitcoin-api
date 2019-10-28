@@ -11,10 +11,10 @@ import (
 )
 
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var user User
-	json.Unmarshal([]byte(req.Body), &user)
+	var account Account
+	json.Unmarshal([]byte(req.Body), &account)
 
-	resp, err := Sign(user)
+	resp, err := Sign(account)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{

@@ -25,7 +25,7 @@
   4. If you want to eXChange bitcoins, make a HTTP POST Request to `localhost:3000/xChangeHandler` with the following json:
       ```
       {
-        "Type":     "buyOrSell",  (ex.: "buy")
-	      "Amount":   "amountToBuy" (ex.: 2)
+        "type":     "buyOrSell",  (ex.: "buy")
+	      "amount":   "amountToBuy" (ex.: 2)
       }
       ```

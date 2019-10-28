@@ -15,9 +15,16 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          USERS_DB: register-users-dev
           REGION: sa-east-1
           PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
+          USERS_DB: users_dev
+          TRANSACTIONS_DB: transactions_dev
+          BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
+          MYSQL_HOST: bitcoin-api-docker_db_1
+          MYSQL_DATABASE: db
+          MYSQL_USER: gouser
+          MYSQL_PASSWORD: gouser@)@<_U2
+          MYSQL_PORT: "3306"
   sign:
     Type: AWS::Serverless::Function
     Properties:

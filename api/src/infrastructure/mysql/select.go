@@ -25,12 +25,14 @@ func Select(command SelectCommand) ([]map[string]string, error) {
 		command.Join,
 		command.Conditions,
 	)
+
 	data := command.ConditionData
 	dataInterface := make([]interface{}, len(data))
 	for i, v := range data {
 		dataInterface[i] = v
 	}
-	rows, err := db.Query(queryString, dataInterface)
+
+	rows, err := db.Query(queryString, dataInterface...)
 
 	if err != nil {
 		return nil, err
@@ -40,8 +42,12 @@ func Select(command SelectCommand) ([]map[string]string, error) {
 	columnSize := len(columnNames)
 
 	rawRow := make([]interface{}, columnSize)
-	var result = make([]map[string]string, 0)
-	var obj map[string]string
+	for index := range rawRow {
+		rawRow[index] = &rawRow[index]
+	}
+
+	result := make([]map[string]string, 0)
+	obj := map[string]string{}
 	for rows.Next() {
 		err = rows.Scan(rawRow...)
 
@@ -50,7 +56,7 @@ func Select(command SelectCommand) ([]map[string]string, error) {
 		}
 
 		for i := 0; i < columnSize; i++ {
-			obj[columnNames[i]] = fmt.Sprintf("%v", rawRow[i])
+			obj[columnNames[i]] = fmt.Sprintf("%v", string(rawRow[i].([]byte)))
 		}
 
 		result = append(result, obj)

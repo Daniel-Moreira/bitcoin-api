@@ -18,9 +18,11 @@ func Insert(command InsertCommand) error {
 	}
 
 	data := structs.Map(command.Data[0])
+	var keyOrder []string
 	columnsString := ""
-	for key, _ := range data {
+	for key := range data {
 		columnsString += fmt.Sprintf("%s, ", key)
+		keyOrder = append(keyOrder, key)
 	}
 	columnsString = columnsString[0 : len(columnsString)-2]
 
@@ -31,8 +33,8 @@ func Insert(command InsertCommand) error {
 		valuesString += rowString
 
 		rowMap := structs.Map(command.Data[i])
-		for _, v := range rowMap {
-			vals = append(vals, v)
+		for i := 0; i < len(keyOrder); i++ {
+			vals = append(vals, rowMap[keyOrder[i]])
 		}
 	}
 	valuesString = valuesString[0 : len(valuesString)-1]

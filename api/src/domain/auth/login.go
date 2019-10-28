@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	. "bitcoin-api-docker/api/src/customtypes"
@@ -29,14 +28,14 @@ func generateJwtToken(account Account, source string) (string, error) {
 	return signToken, nil
 }
 
-func Login(account Account, source string) (string, error) {
+func Login(account Account, source string) (map[string]string, error) {
 	if source == "" {
-		return "", errors.New("Source is required")
+		return nil, errors.New("Source is required")
 	}
 
 	command := mysql.SelectCommand{
 		TableName:     os.Getenv("USERS_DB"),
-		Projection:    []string{"password"},
+		Projection:    []string{"Password"},
 		Join:          mysql.NONE,
 		Conditions:    mysql.USER,
 		ConditionData: []string{account.UserID},
@@ -44,19 +43,18 @@ func Login(account Account, source string) (string, error) {
 	result, err := mysql.Select(command)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	fmt.Println(result[0]["password"])
-	if result[0]["password"] != account.Password {
-		return "", errors.New("User passaword doesn't match!")
+	if result[0]["Password"] != account.Password {
+		return nil, errors.New("User passaword doesn't match!")
 	}
 
 	jwtToken, err := generateJwtToken(account, source)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return jwtToken, nil
+	return map[string]string{"Token": jwtToken}, nil
 }

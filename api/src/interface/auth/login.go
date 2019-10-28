@@ -28,9 +28,11 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		}, nil
 	}
 
+	jsonResp, _ := json.Marshal(resp)
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(resp),
+		Body:       string(jsonResp),
 	}, nil
 }
 

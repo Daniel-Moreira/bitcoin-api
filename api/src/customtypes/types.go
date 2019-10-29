@@ -9,8 +9,13 @@ type Account struct {
 
 type Transaction struct {
 	UserId string
-	Type   string  `json:"type"`
-	Amount float64 `json:"amount"`
+	Type   string `json:"type"`
+	Amount string `json:"amount"`
 	Price  float64
 	Date   string
+}
+
+type SystemReport struct {
+	UserId string `json:"userId"`
+	Date   string `json:"date"`
 }

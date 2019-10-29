@@ -8,7 +8,6 @@ import (
 )
 
 func authenticateJwtToken(token string) (string, error) {
-	// jwtMethod := jwt.GetSigningMethod("HS256")
 	claims := &jwt.StandardClaims{}
 
 	tk, err := jwt.ParseWithClaims(token, claims, func(tk *jwt.Token) (interface{}, error) {

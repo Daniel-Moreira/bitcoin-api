@@ -48,6 +48,7 @@ func Insert(command InsertCommand) error {
 	stmt, err := db.Prepare(queryString)
 
 	fmt.Println(queryString)
+	fmt.Println(vals)
 	if err != nil {
 		return err
 	}

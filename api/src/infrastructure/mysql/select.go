@@ -26,12 +26,15 @@ func Select(command SelectCommand) ([]map[string]string, error) {
 		command.Conditions,
 	)
 
+	fmt.Println(queryString)
+
 	data := command.ConditionData
 	dataInterface := make([]interface{}, len(data))
 	for i, v := range data {
 		dataInterface[i] = v
 	}
 
+	fmt.Println(data)
 	rows, err := db.Query(queryString, dataInterface...)
 
 	if err != nil {
@@ -42,13 +45,13 @@ func Select(command SelectCommand) ([]map[string]string, error) {
 	columnSize := len(columnNames)
 
 	rawRow := make([]interface{}, columnSize)
-	for index := range rawRow {
-		rawRow[index] = &rawRow[index]
-	}
 
 	result := make([]map[string]string, 0)
-	obj := map[string]string{}
 	for rows.Next() {
+		obj := map[string]string{}
+		for index := range rawRow {
+			rawRow[index] = &rawRow[index]
+		}
 		err = rows.Scan(rawRow...)
 
 		if err != nil {
@@ -56,11 +59,22 @@ func Select(command SelectCommand) ([]map[string]string, error) {
 		}
 
 		for i := 0; i < columnSize; i++ {
-			obj[columnNames[i]] = fmt.Sprintf("%v", string(rawRow[i].([]byte)))
+			switch rawRow[i].(type) {
+			case int64:
+				obj[columnNames[i]] = fmt.Sprintf("%d", rawRow[i])
+			case float64:
+				obj[columnNames[i]] = fmt.Sprintf("%f", rawRow[i])
+			case float32:
+				obj[columnNames[i]] = fmt.Sprintf("%f", rawRow[i])
+			default:
+				obj[columnNames[i]] = fmt.Sprintf("%v", string(rawRow[i].([]byte)))
+			}
 		}
 
 		result = append(result, obj)
 	}
+
+	fmt.Println(result)
 
 	return result, nil
 }

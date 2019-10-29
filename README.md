@@ -2,7 +2,8 @@
 
 # Install:
   1. Docker and docker-compose
-  2. Run `docker-compose up`
+  2. Run `docker-compose up -d`
+  3. At api folder run `make offline`
 
 ## Test
   1. Make a HTTP POST Request to `localhost:3000/sign` with the following json:

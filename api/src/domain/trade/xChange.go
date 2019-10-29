@@ -2,30 +2,47 @@ package trade
 
 import (
 	. "bitcoin-api-docker/api/src/customtypes"
+	"bitcoin-api-docker/api/src/domain/cache"
+	"bitcoin-api-docker/api/src/infrastructure/cmc"
+	"bitcoin-api-docker/api/src/infrastructure/mysql"
+	"fmt"
+	"os"
+	"strconv"
+	"time"
 )
 
 func XChange(transaction Transaction) (map[string]string, error) {
-	// now := time.Now()
-	// transaction.Date = now
+	now := time.Now()
+	transaction.Date = now.Format("2006-01-02 15:04:05")
 
-	// fmt.Printf("%v".transaction)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	lastBitcoinRequest := cache.Get("BITCOIN_EXP")
+	timeFromLastRequest, _ := time.Parse("2006-01-02 15:04:05", lastBitcoinRequest)
+	subDate := int((now.Sub(timeFromLastRequest)).Minutes())
 
-	// lastBitcoinRequest := cache.Get("BITCOIN_EXP")
-	// int((now.Sub(lastBitcoinRequest)).Minutes()
-	// now := time.Now()
-	// afterTime := now.Add(time.Minute * 15)
+	bitCoinPrice := cache.Get("BITCOIN_PRICE")
+	if subDate >= 0 {
+		bitCoinPrice, err := cmc.GetBitcoinData()
+		if err != nil {
+			return nil, err
+		}
 
-	// cache.Put("BITCOIN_PRICE", usd["price"])
-	// cache.Put("BITCOIN_EXP", afterTime.String())
+		afterTime := now.Add(time.Minute * 15)
 
-	// err = Put(os.Getenv("REGISTER_USERS"), user)
+		cache.Put("BITCOIN_PRICE", fmt.Sprintf("%f", bitCoinPrice))
+		cache.Put("BITCOIN_EXP", afterTime.String())
+	}
+	transaction.Price, _ = strconv.ParseFloat(bitCoinPrice, 64)
 
-	// if err != nil {
-	// 	return nil, err
-	// }
+	command := mysql.InsertCommand{
+		TableName: os.Getenv("TRANSACTIONS_DB"),
+	}
+	command.Data = append(command.Data, transaction)
 
-	return map[string]string{"Message": "Account Created!"}, nil
+	err := mysql.Insert(command)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]string{"Message": "Transaction registered!"}, nil
 }

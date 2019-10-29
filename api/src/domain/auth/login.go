@@ -3,6 +3,7 @@ package auth
 import (
 	"errors"
 	"os"
+	"time"
 
 	. "bitcoin-api-docker/api/src/customtypes"
 	"bitcoin-api-docker/api/src/infrastructure/mysql"
@@ -14,7 +15,7 @@ func generateJwtToken(account Account, source string) (string, error) {
 	jwtMethod := jwt.GetSigningMethod("HS256")
 	claims := &jwt.StandardClaims{
 		Subject:   account.UserID,
-		ExpiresAt: 15000,
+		ExpiresAt: (time.Now().Add(60 * time.Minute)).Unix(),
 		Issuer:    source,
 	}
 

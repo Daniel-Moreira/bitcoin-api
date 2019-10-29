@@ -18,13 +18,14 @@ Resources:
           REGION: sa-east-1
           PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
           USERS_DB: users_dev
-          TRANSACTIONS_DB: transactions_dev
           BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
           MYSQL_HOST: bitcoin-api-docker_db_1
           MYSQL_DATABASE: db
           MYSQL_USER: gouser
           MYSQL_PASSWORD: gouser@)@<_U2
           MYSQL_PORT: "3306"
+          BITCOIN_EXP:
+          BITCOIN_PRICE:
   sign:
     Type: AWS::Serverless::Function
     Properties:
@@ -39,6 +40,27 @@ Resources:
       Environment:
         Variables:
           REGION: sa-east-1
+          USERS_DB: users_dev
+          BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
+          MYSQL_HOST: bitcoin-api-docker_db_1
+          MYSQL_DATABASE: db
+          MYSQL_USER: gouser
+          MYSQL_PASSWORD: gouser@)@<_U2
+          MYSQL_PORT: "3306"
+  xChange:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: bin/xChangeHandler
+      Runtime: go1.x
+      Events:
+        xChange:
+          Type: Api
+          Properties:
+            Path: /xChange
+            Method: POST
+      Environment:
+        Variables:
+          REGION: sa-east-1
           PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
           USERS_DB: users_dev
           TRANSACTIONS_DB: transactions_dev
@@ -48,6 +70,8 @@ Resources:
           MYSQL_USER: gouser
           MYSQL_PASSWORD: gouser@)@<_U2
           MYSQL_PORT: "3306"
+          BITCOIN_EXP:
+          BITCOIN_PRICE:
   # register:
   #   Type: AWS::Serverless::SimpleTable
   #   Properties:

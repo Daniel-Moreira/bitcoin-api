@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	. "bitcoin-api-docker/api/src/customtypes"
+	"bitcoin-api-docker/api/src/domain/auth"
 	"bitcoin-api-docker/api/src/domain/trade"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -13,8 +14,10 @@ import (
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var transaction Transaction
 	json.Unmarshal([]byte(req.Body), &transaction)
+	token := req.Headers["Jwt"]
 
-	// transaction.userId = authenticate(header)
+	userId, err := auth.Authenticate(token)
+	transaction.UserId = userId
 	resp, err := trade.XChange(transaction)
 
 	if err != nil {

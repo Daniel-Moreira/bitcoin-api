@@ -11,6 +11,6 @@ type Transaction struct {
 	UserId string
 	Type   string  `json:"type"`
 	Amount float64 `json:"amount"`
-	Price  float32
+	Price  float64
 	Date   string
 }

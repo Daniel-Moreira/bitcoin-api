@@ -16,6 +16,9 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	var account Account
 	json.Unmarshal([]byte(req.Body), &account)
 
+	// fmt.Println(os.Getenv("CACHE_DB"))
+	// fmt.Println(cache.Get("TEST"))
+	// cache.Put("TEST", "jflkdsahf")
 	// Source prob will need to change
 	source := req.RequestContext.Identity.SourceIP
 

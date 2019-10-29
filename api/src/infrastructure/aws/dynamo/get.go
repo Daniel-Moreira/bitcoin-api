@@ -9,12 +9,12 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-func Get(TableName string, key map[string]string, resultData interface{}) error {
+func Get(TableName string, key map[string]string) (map[string]string, error) {
 	dynamoClient := client()
 
 	keyMap, err := dynamodbattribute.MarshalMap(key)
 	if err != nil {
-		return fmt.Errorf("Cannot marshal %s into AttributeValue map", key)
+		return nil, fmt.Errorf("Cannot marshal %s into AttributeValue map", key)
 	}
 
 	params := &dynamodb.GetItemInput{
@@ -24,13 +24,15 @@ func Get(TableName string, key map[string]string, resultData interface{}) error 
 
 	result, err := dynamoClient.GetItem(params)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
+	var resultData map[string]string
 	err = dynamodbattribute.UnmarshalMap(result.Item, resultData)
 	if err != nil {
-		return errors.New("Failed to unmarshal Record" + err.Error())
+		return nil, errors.New("Failed to unmarshal Record" + err.Error())
 	}
 
-	return nil
+	fmt.Println(result.Item)
+	return resultData, nil
 }

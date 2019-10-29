@@ -5,16 +5,31 @@ import (
 
 	. "bitcoin-api-docker/api/src/customtypes"
 	"bitcoin-api-docker/api/src/domain/auth"
+	"bitcoin-api-docker/api/src/domain/trade"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var account Account
-	json.Unmarshal([]byte(req.Body), &account)
+type SystemReport struct {
+  UserId string,
+  Date string,
+}
 
-	resp, err := auth.Sign(account)
+func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	var report SystemReport
+	json.Unmarshal([]byte(req.Body), &report)
+	token := req.Headers["Jwt"]
+	userId, err := auth.Authenticate(token)
+
+	if report.UserId == nil && report.Date == nil {
+    return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       string(map[string]string{"Error": "Report must have an userId or a date!"}),
+		}, nil
+  }
+
+	resp, err := resport.New(report)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{

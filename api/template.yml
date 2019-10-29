@@ -1,6 +1,21 @@
 AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A hello world application.
+Globals:
+  Function:
+    Environment:
+      Variables:
+        REGION: sa-east-1
+        PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
+        USERS_DB: users_dev
+        TRANSACTIONS_DB: transactions_dev
+        BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
+        MYSQL_HOST: bitcoin-api-docker_db_1
+        MYSQL_DATABASE: db
+        MYSQL_USER: gouser
+        MYSQL_PASSWORD: gouser@)@<_U2
+        MYSQL_PORT: "3306"
+        CACHE_DB: cache_dev
 Resources:
   login:
     Type: AWS::Serverless::Function
@@ -13,19 +28,6 @@ Resources:
           Properties:
             Path: /login
             Method: GET
-      Environment:
-        Variables:
-          REGION: sa-east-1
-          PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
-          USERS_DB: users_dev
-          BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
-          MYSQL_HOST: bitcoin-api-docker_db_1
-          MYSQL_DATABASE: db
-          MYSQL_USER: gouser
-          MYSQL_PASSWORD: gouser@)@<_U2
-          MYSQL_PORT: "3306"
-          BITCOIN_EXP:
-          BITCOIN_PRICE:
   sign:
     Type: AWS::Serverless::Function
     Properties:
@@ -37,16 +39,6 @@ Resources:
           Properties:
             Path: /sign
             Method: POST
-      Environment:
-        Variables:
-          REGION: sa-east-1
-          USERS_DB: users_dev
-          BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
-          MYSQL_HOST: bitcoin-api-docker_db_1
-          MYSQL_DATABASE: db
-          MYSQL_USER: gouser
-          MYSQL_PASSWORD: gouser@)@<_U2
-          MYSQL_PORT: "3306"
   xChange:
     Type: AWS::Serverless::Function
     Properties:
@@ -58,26 +50,23 @@ Resources:
           Properties:
             Path: /xChange
             Method: POST
-      Environment:
-        Variables:
-          REGION: sa-east-1
-          PRIVATE_KEY: )@<_U2!Ba`xMYhFL#!r3V.,}/ySn3kPuvCZ[*f[ew+Hd5\7Kw:*G&Rq`9`-]5&;>
-          USERS_DB: users_dev
-          TRANSACTIONS_DB: transactions_dev
-          BITCOIN_API_KEY: eeea17d5-d411-4d8c-85a7-989e32a1fca6
-          MYSQL_HOST: bitcoin-api-docker_db_1
-          MYSQL_DATABASE: db
-          MYSQL_USER: gouser
-          MYSQL_PASSWORD: gouser@)@<_U2
-          MYSQL_PORT: "3306"
-          BITCOIN_EXP:
-          BITCOIN_PRICE:
+  report:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: bin/report
+      Runtime: go1.x
+      Events:
+        report:
+          Type: Api
+          Properties:
+            Path: /report
+            Method: GET
   # register:
   #   Type: AWS::Serverless::SimpleTable
   #   Properties:
-  #   TableName: register-users-dev
+  #     TableName: cache_dev
   #   PrimaryKey:
-  #     Name: userId
+  #     Name: key
   #     Type: String
   #   ProvisionedThroughput:
   #     ReadCapacityUnits: 5

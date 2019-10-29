@@ -10,7 +10,8 @@ import (
 
 func client() *dynamodb.DynamoDB {
 	sess := session.Must(session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("REGION")),
+		Region:   aws.String(os.Getenv("REGION")),
+		Endpoint: aws.String("http://localhost:8000"),
 	}))
 
 	dynamoClient := dynamodb.New(sess)

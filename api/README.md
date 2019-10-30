@@ -1,15 +1,3 @@
----
-title: Bitcoin API
-language_tabs:
-  - javascript--go: Go
-toc_footers: []
-includes: []
-search: false
-highlight_theme: darkula
-headingLevel: 2
-
----
-
 <h1 id="bitcoin-api">Bitcoin API v1</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
@@ -61,7 +49,10 @@ Endpoint to user log into the system. It checks the user ID and password and ret
 > 200 Response
 
 ```json
-null
+{
+  "StatusCode": 200,
+  "Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzIzOTkxMDAsImlzcyI6IjEyNy4wLjAuMSIsInN1YiI6ImRhbmllbC5tb3JlaXJhIn0.igU_mYoe3CnYVbf-P6DyOL7yo0W8kCRiKyZKa2BFACU"
+}
 ```
 
 <h3 id="user-login-responses">Responses</h3>
@@ -116,7 +107,10 @@ Endpoint to register an user into the system. It receives an user ID, password, 
 > 201 Response
 
 ```json
-null
+{
+  "StatusCode": 201,
+  "Message": "Account Created!"
+}
 ```
 
 <h3 id="user-sign-up-endpoint-responses">Responses</h3>
@@ -171,7 +165,10 @@ Endpoint for an authenticated user to trade bitcoins'. It receives the transacti
 > 201 Response
 
 ```json
-null
+{
+  "StatusCode": 201,
+  "Message": "Transaction registered!"
+}
 ```
 
 <h3 id="endpoint-for-an-authenticated-user-to-trade-bitcoins-responses">Responses</h3>
@@ -226,7 +223,28 @@ Endpoint for an authenticated user to receive reports from the system'. Returns 
 > 200 Response
 
 ```json
-null
+{
+  "StatusCode": 200,
+  "Report": [
+        {
+            "Amount": "0.000000",
+            "Date": "2019-10-29 01:34:37",
+            "Name": "Daniel Augusto de Melo Moreira",
+            "Price": "0.000000",
+            "TransactionId": "4",
+            "Type": "buy",
+            "UserId": "daniel.moreira"
+        },
+        {
+            "Amount": "0.000000",
+            "Date": "2019-10-29 01:36:42",
+            "Name": "Daniel Augusto de Melo Moreira",
+            "Price": "0.000000",
+            "TransactionId": "5",
+            "Type": "buy",
+            "UserId": "daniel.moreira"
+        }]
+}
 ```
 
 <h3 id="endpoint-for-an-authenticated-user-to-receive-reports-responses">Responses</h3>

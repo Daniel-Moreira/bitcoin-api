@@ -17,6 +17,14 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	token := req.Headers["Jwt"]
 
 	userId, err := auth.Authenticate(token)
+
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       err.Error(),
+		}, nil
+	}
+
 	transaction.UserId = userId
 	resp, err := trade.XChange(transaction)
 

@@ -17,6 +17,13 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	token := req.Headers["Jwt"]
 	_, err := auth.Authenticate(token)
 
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       err.Error(),
+		}, nil
+	}
+
 	resp, err := reports.New(report)
 
 	if err != nil {
@@ -29,7 +36,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	jsonResp, _ := json.Marshal(resp)
 
 	return events.APIGatewayProxyResponse{
-		StatusCode: 201,
+		StatusCode: 200,
 		Body:       string(jsonResp),
 	}, nil
 }

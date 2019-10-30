@@ -17,11 +17,11 @@ type Join string
 type Conditions string
 
 const (
-	BITCOIN Join = "LEFT JOIN users_dev ON users_dev.UserId = transactions_dev.UserId"
+	BITCOIN Join = "INNER JOIN users_dev USING(UserId)"
 	NONE    Join = ""
 )
 
 const (
-	USER Conditions = "transactions_dev.UserId = ?"
-	DATE Conditions = "transactions_dev.Date > ?"
+	USER Conditions = "UserId = ?"
+	DATE Conditions = "Date(transactions_dev.Date) = ?"
 )

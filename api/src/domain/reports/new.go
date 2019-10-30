@@ -5,6 +5,7 @@ import (
 	"bitcoin-api-docker/api/src/infrastructure/mysql"
 	"errors"
 	"os"
+	"time"
 )
 
 func New(report SystemReport) (map[string]interface{}, error) {
@@ -14,13 +15,17 @@ func New(report SystemReport) (map[string]interface{}, error) {
 
 	command := mysql.SelectCommand{
 		TableName:     os.Getenv("TRANSACTIONS_DB"),
-		Projection:    []string{"*"},
+		Projection:    []string{os.Getenv("TRANSACTIONS_DB") + ".*", os.Getenv("USERS_DB") + ".Name"},
 		Join:          mysql.BITCOIN,
 		Conditions:    mysql.USER,
 		ConditionData: []string{report.UserId},
 	}
 	if report.Date != "" {
 		command.Conditions = mysql.DATE
+		_, err := time.Parse("2006-01-02", report.Date)
+		if err != nil {
+			return nil, errors.New("Date must be in the format YYYY-MM-DD HH:MM:SS!")
+		}
 		command.ConditionData = []string{report.Date}
 	}
 

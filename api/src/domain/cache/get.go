@@ -8,5 +8,5 @@ import (
 func Get(key string) string {
 	result, _ := dynamo.Get(os.Getenv("CACHE_DB"), map[string]string{"key": key})
 
-	return string(result[key])
+	return string(result["value"])
 }

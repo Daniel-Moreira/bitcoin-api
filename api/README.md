@@ -66,7 +66,7 @@ Endpoint to user log into the system. It checks the user ID and password and ret
 This operation does not require authentication
 </aside>
 
-## User sign up endpoint
+## User sign up
 
 <a id="opIdsign"></a>
 
@@ -124,7 +124,7 @@ Endpoint to register an user into the system. It receives an user ID, password, 
 This operation does not require authentication
 </aside>
 
-## Endpoint for an authenticated user to trade bitcoins
+## Trade bitcoins
 
 <a id="opIdxChangeBitcoin"></a>
 
@@ -182,7 +182,7 @@ Endpoint for an authenticated user to trade bitcoins'. It receives the transacti
 This operation does not require authentication
 </aside>
 
-## Endpoint for an authenticated user to receive reports
+## Reports
 
 <a id="opIdreport"></a>
 

@@ -2,7 +2,6 @@ package dynamo
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -13,19 +12,17 @@ import (
 func Put(TableName string, data interface{}) error {
 	dynamoClient := client()
 
-	userMap, err := dynamodbattribute.MarshalMap(data)
+	dataMap, err := dynamodbattribute.MarshalMap(data)
 	if err != nil {
-		panic("Cannot marshal data into AttributeValue map")
-		return err
+		return errors.New("Cannot marshal data into AttributeValue map")
 	}
 
 	params := &dynamodb.PutItemInput{
-		TableName:           aws.String(TableName),
-		Item:                userMap,
-		ConditionExpression: aws.String("attribute_not_exists(userId)"),
+		TableName: aws.String(TableName),
+		Item:      dataMap,
 	}
 
-	result, err := dynamoClient.PutItem(params)
+	_, err = dynamoClient.PutItem(params)
 	if err != nil {
 		awsErr := err.(awserr.Error)
 
@@ -35,8 +32,6 @@ func Put(TableName string, data interface{}) error {
 
 		return err
 	}
-
-	fmt.Println(result)
 
 	return nil
 }

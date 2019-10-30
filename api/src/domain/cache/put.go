@@ -6,5 +6,5 @@ import (
 )
 
 func Put(key string, value string) error {
-	return dynamo.Put(os.Getenv("CACHE_DB"), map[string]string{key: value})
+	return dynamo.Put(os.Getenv("CACHE_DB"), map[string]string{"key": key, "value": value})
 }

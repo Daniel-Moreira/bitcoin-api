@@ -9,10 +9,11 @@ import (
 )
 
 func client() *dynamodb.DynamoDB {
-	sess := session.Must(session.NewSession(&aws.Config{
-		Region:   aws.String(os.Getenv("REGION")),
-		Endpoint: aws.String("http://localhost:8000"),
-	}))
+	config := &aws.Config{Region: aws.String(os.Getenv("REGION"))}
+	if os.Getenv("AWS_SAM_LOCAL") == "true" {
+		config.Endpoint = aws.String("http://bitcoin-api-docker_dynamo_1:8000")
+	}
+	sess := session.Must(session.NewSession(config))
 
 	dynamoClient := dynamodb.New(sess)
 

@@ -28,11 +28,10 @@ func Get(TableName string, key map[string]string) (map[string]string, error) {
 	}
 
 	var resultData map[string]string
-	err = dynamodbattribute.UnmarshalMap(result.Item, resultData)
+	err = dynamodbattribute.UnmarshalMap(result.Item, &resultData)
 	if err != nil {
 		return nil, errors.New("Failed to unmarshal Record" + err.Error())
 	}
 
-	fmt.Println(result.Item)
 	return resultData, nil
 }

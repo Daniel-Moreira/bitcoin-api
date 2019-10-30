@@ -4,7 +4,12 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "gen-docs": "sls openapi generate -f json -o swagger.json",
+    "gen-docs-readme": "node node_modules/widdershins/widdershins.js --search false --language_tabs 'javascript--go:Go' --summary swagger.json -o README.md"
+  },
   "devDependencies": {
-    "serverless-offline": "^5.12.0"
+    "widdershins": "^3.6.7",
+    "serverless-openapi-documentation": "^0.4.0"
   }
 }

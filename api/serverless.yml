@@ -3,17 +3,13 @@ service: bitcoin-api
 frameworkVersion: ">=1.28.0 <2.0.0"
 
 plugins:
-  - serverless-offline
+  - serverless-openapi-documentation
 
 package:
  exclude:
    - ./**
  include:
    - ./bin/**
-
-custom:
-  # serverless-offline:
-    # host: 0.0.0.0
 
 provider:
   name: aws
@@ -33,20 +29,24 @@ provider:
     MYSQL_USER: gouser
     MYSQL_PASSWORD: gouser@)@<_U2
     MYSQL_PORT: 3306
+    CACHE_DB: cache_${opt:stage, self:provider.stage}
 
   iamRoleStatements:
-    # - Effect: Allow
-    #   Action:
-    #   - dynamodb:GetItem
-    #   - dynamodb:Query
-    #   - dynamodb:DeleteItem
-    #   - dynamodb:UpdateItem
-    #   - dynamodb:PutItem
-    #   Resource: ['*']
+    - Effect: Allow
+      Action:
+      - dynamodb:GetItem
+      - dynamodb:Query
+      - dynamodb:DeleteItem
+      - dynamodb:UpdateItem
+      - dynamodb:PutItem
+      Resource: ['*']
     - Effect: Allow
       Action:
       - lambda:InvokeFunction
       Resource: ["*"]
+
+custom:
+  documentation: ${file(doc/serverless.doc.yml):documentation}
 
 functions:
   login:
@@ -55,48 +55,46 @@ functions:
       - http:
           path: login
           method: GET
+          documentation: ${file(doc/serverless.doc.yml):endpoints.login}
   sign:
     handler: src/interface/authentication.sign
     events:
       - http:
           path: sign
           method: POST
-#   xChangeBitcoin:
-#     handler: src/interface/bitcoin.xChangeHandler
-#     events:
-#       - http:
-#         path: xChangeBitcoin
-#         method: GET
-#       - http:
-#         path: xChangeBitcoin
-#         method: POST
-#       - http:
-#         path: /
-#         method: GET
-#         authorizer:
-#           name: authorize
-#           resultTtlInSeconds: 0
-#       - http:
-#         path: /
-#         method: POST
-#         authorizer:
-#           name: authorize
-#           resultTtlInSeconds: 0
+          documentation: ${file(doc/serverless.doc.yml):endpoints.sign}
+  xChangeBitcoin:
+    handler: src/interface/bitcoin.xChangeHandler
+    events:
+      - http:
+          path: xChangeBitcoin
+          method: POST
+          documentation: ${file(doc/serverless.doc.yml):endpoints.xChange}
+        # authorizer:
+        #   name: authorize
+        #   resultTtlInSeconds: 0
+  report:
+    handler: src/interface/report.handler
+    events:
+      - http:
+          path: report
+          method: GET
+          documentation: ${file(doc/serverless.doc.yml):endpoints.report}
 
-# resources:
-#   Resources:
-#     registerUsers:
-#       Type: 'AWS::DynamoDB::Table'
-#       Properties:
-#         AttributeDefinitions:
-#           -
-#             AttributeName: "userId"
-#             AttributeType: "S"
-#         KeySchema:
-#           -
-#             AttributeName: "userId"
-#             KeyType: "HASH"
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
-#         TableName: ${self:provider.environment.REGISTER_USERS}
+resources:
+  Resources:
+    registerUsers:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "key"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "key"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.CACHE_DB}

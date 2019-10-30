@@ -1,0 +1,82 @@
+documentation:
+  version: '1'
+  title: 'Bitcoin API'
+  description: 'Bitcoin API'
+  models:
+    - name: 'ErrorResponse'
+      description: 'This is an error'
+      contentType: 'application/json'
+      schema: ${file(doc/models/response/Error.json)}
+    - name: 'SuccessResponse'
+      description: 'Normal response model'
+      contentType: 'application/json'
+      schema: ${file(doc/models/response/Success.json)}
+    - name: 'JWTReponse'
+      description: 'Model that returns a JWT token'
+      contentType: 'application/json'
+      schema: ${file(doc/models/response/JWTSucces.json)}
+    - name: 'ReportReponse'
+      description: 'Model that returns a Report data'
+      contentType: 'application/json'
+      schema: ${file(doc/models/response/ReportSucces.json)}
+endpoints:
+  login:
+    path: 'login'
+    summary: 'User login'
+    description: "Endpoint to user log into the system. It checks the user ID and password and returns a JWT token."
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: 'User successfully logged into the system'
+        responseModels:
+          application/json: 'JWTReponse'
+      - statusCode: 500
+        responseBody:
+          description: 'Some error occur during the loging'
+        responseModels:
+          application/json: 'ErrorResponse'
+  sign:
+    path: 'sign'
+    summary: 'User sign up endpoint'
+    description: "Endpoint to register an user into the system. It receives an user ID, password, full name and birthday."
+    methodResponses:
+      - statusCode: 201
+        responseBody:
+          description: 'User successfully registered into the system'
+        responseModels:
+          application/json: 'SuccessResponse'
+      - statusCode: 500
+        responseBody:
+          description: 'Some error occur during the sign up process'
+        responseModels:
+          application/json: 'ErrorResponse'
+  xChange:
+    path: 'xChange'
+    summary: 'Endpoint for an authenticated user to trade bitcoins'
+    description: "Endpoint for an authenticated user to trade bitcoins'. It receives the transaction type (buy or sell) and the amount of coins to trade."
+    methodResponses:
+      - statusCode: 201
+        responseBody:
+          description: 'Transaction successfully registered into the system'
+        responseModels:
+          application/json: 'SuccessResponse'
+      - statusCode: 500
+        responseBody:
+          description: 'Some error occur during the transaction process'
+        responseModels:
+          application/json: 'ErrorResponse'
+  report:
+    path: 'report'
+    summary: 'Endpoint for an authenticated user to receive reports'
+    description: "Endpoint for an authenticated user to receive reports from the system'. Returns all transactions registered for an given user ID or day."
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: 'Transaction successfully registered into the system'
+        responseModels:
+          application/json: 'ReportReponse'
+      - statusCode: 500
+        responseBody:
+          description: 'Some error occur during the report process'
+        responseModels:
+          application/json: 'ErrorResponse'

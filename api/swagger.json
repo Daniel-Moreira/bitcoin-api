@@ -1,0 +1,147 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "StatusCode": "integer",
+        "Message": "string"
+      },
+      "SuccessResponse": {
+        "StatusCode": "integer",
+        "Message": "object"
+      },
+      "JWTReponse": {
+        "StatusCode": "integer",
+        "Token": "string"
+      },
+      "ReportReponse": {
+        "StatusCode": "integer",
+        "Report": "array"
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "Bitcoin API",
+    "description": "Bitcoin API",
+    "version": "1"
+  },
+  "paths": {
+    "/login": {
+      "get": {
+        "operationId": "login",
+        "summary": "User login",
+        "description": "Endpoint to user log into the system. It checks the user ID and password and returns a JWT token.",
+        "responses": {
+          "200": {
+            "description": "User successfully logged into the system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTReponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some error occur during the loging",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sign": {
+      "post": {
+        "operationId": "sign",
+        "summary": "User sign up endpoint",
+        "description": "Endpoint to register an user into the system. It receives an user ID, password, full name and birthday.",
+        "responses": {
+          "201": {
+            "description": "User successfully registered into the system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some error occur during the sign up process",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/xChangeBitcoin": {
+      "post": {
+        "operationId": "xChangeBitcoin",
+        "summary": "Endpoint for an authenticated user to trade bitcoins",
+        "description": "Endpoint for an authenticated user to trade bitcoins'. It receives the transaction type (buy or sell) and the amount of coins to trade.",
+        "responses": {
+          "201": {
+            "description": "Transaction successfully registered into the system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some error occur during the transaction process",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report": {
+      "get": {
+        "operationId": "report",
+        "summary": "Endpoint for an authenticated user to receive reports",
+        "description": "Endpoint for an authenticated user to receive reports from the system'. Returns all transactions registered for an given user ID or day.",
+        "responses": {
+          "200": {
+            "description": "Transaction successfully registered into the system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportReponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some error occur during the report process",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

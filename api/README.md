@@ -1,0 +1,296 @@
+---
+title: Bitcoin API
+language_tabs:
+  - javascript--go: Go
+toc_footers: []
+includes: []
+search: false
+highlight_theme: darkula
+headingLevel: 2
+
+---
+
+<h1 id="bitcoin-api">Bitcoin API v1</h1>
+
+> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
+
+Bitcoin API
+
+# Authentication
+
+<h1 id="bitcoin-api-default">Default</h1>
+
+## User login
+
+<a id="opIdlogin"></a>
+
+> Code samples
+
+```javascript--go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/login", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /login`
+
+Endpoint to user log into the system. It checks the user ID and password and returns a JWT token.
+
+> Example responses
+
+> 200 Response
+
+```json
+null
+```
+
+<h3 id="user-login-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|User successfully logged into the system|[JWTReponse](#schemajwtreponse)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Some error occur during the loging|[ErrorResponse](#schemaerrorresponse)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## User sign up endpoint
+
+<a id="opIdsign"></a>
+
+> Code samples
+
+```javascript--go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/sign", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /sign`
+
+Endpoint to register an user into the system. It receives an user ID, password, full name and birthday.
+
+> Example responses
+
+> 201 Response
+
+```json
+null
+```
+
+<h3 id="user-sign-up-endpoint-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|User successfully registered into the system|[SuccessResponse](#schemasuccessresponse)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Some error occur during the sign up process|[ErrorResponse](#schemaerrorresponse)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## Endpoint for an authenticated user to trade bitcoins
+
+<a id="opIdxChangeBitcoin"></a>
+
+> Code samples
+
+```javascript--go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/xChangeBitcoin", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /xChangeBitcoin`
+
+Endpoint for an authenticated user to trade bitcoins'. It receives the transaction type (buy or sell) and the amount of coins to trade.
+
+> Example responses
+
+> 201 Response
+
+```json
+null
+```
+
+<h3 id="endpoint-for-an-authenticated-user-to-trade-bitcoins-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Transaction successfully registered into the system|[SuccessResponse](#schemasuccessresponse)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Some error occur during the transaction process|[ErrorResponse](#schemaerrorresponse)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## Endpoint for an authenticated user to receive reports
+
+<a id="opIdreport"></a>
+
+> Code samples
+
+```javascript--go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/report", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /report`
+
+Endpoint for an authenticated user to receive reports from the system'. Returns all transactions registered for an given user ID or day.
+
+> Example responses
+
+> 200 Response
+
+```json
+null
+```
+
+<h3 id="endpoint-for-an-authenticated-user-to-receive-reports-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Transaction successfully registered into the system|[ReportReponse](#schemareportreponse)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Some error occur during the report process|[ErrorResponse](#schemaerrorresponse)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+# Schemas
+
+<h2 id="tocSerrorresponse">ErrorResponse</h2>
+
+<a id="schemaerrorresponse"></a>
+
+```json
+null
+
+```
+
+### Properties
+
+*None*
+
+<h2 id="tocSsuccessresponse">SuccessResponse</h2>
+
+<a id="schemasuccessresponse"></a>
+
+```json
+null
+
+```
+
+### Properties
+
+*None*
+
+<h2 id="tocSjwtreponse">JWTReponse</h2>
+
+<a id="schemajwtreponse"></a>
+
+```json
+null
+
+```
+
+### Properties
+
+*None*
+
+<h2 id="tocSreportreponse">ReportReponse</h2>
+
+<a id="schemareportreponse"></a>
+
+```json
+null
+
+```
+
+### Properties
+
+*None*
+

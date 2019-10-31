@@ -4,10 +4,6 @@
 
 Bitcoin API
 
-# Authentication
-
-<h1 id="bitcoin-api-default">Default</h1>
-
 ## User login
 
 <a id="opIdlogin"></a>
@@ -257,58 +253,4 @@ Endpoint for an authenticated user to receive reports from the system'. Returns 
 <aside class="success">
 This operation does not require authentication
 </aside>
-
-# Schemas
-
-<h2 id="tocSerrorresponse">ErrorResponse</h2>
-
-<a id="schemaerrorresponse"></a>
-
-```json
-null
-
-```
-
-### Properties
-
-*None*
-
-<h2 id="tocSsuccessresponse">SuccessResponse</h2>
-
-<a id="schemasuccessresponse"></a>
-
-```json
-null
-
-```
-
-### Properties
-
-*None*
-
-<h2 id="tocSjwtreponse">JWTReponse</h2>
-
-<a id="schemajwtreponse"></a>
-
-```json
-null
-
-```
-
-### Properties
-
-*None*
-
-<h2 id="tocSreportreponse">ReportReponse</h2>
-
-<a id="schemareportreponse"></a>
-
-```json
-null
-
-```
-
-### Properties
-
-*None*
 

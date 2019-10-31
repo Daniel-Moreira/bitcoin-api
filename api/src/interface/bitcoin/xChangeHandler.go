@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"os"
 
 	. "bitcoin-api-docker/api/src/customtypes"
 	"bitcoin-api-docker/api/src/domain/auth"
@@ -14,18 +15,22 @@ import (
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var transaction Transaction
 	json.Unmarshal([]byte(req.Body), &transaction)
-	token := req.Headers["Jwt"]
 
-	userId, err := auth.Authenticate(token)
+	transaction.UserId = req.RequestContext.Authorizer["principalId"].(string)
+	// Local token validation
+	if os.Getenv("AWS_SAM_LOCAL") == "true" {
+		token := req.Headers["Jwt"]
+		userId, err := auth.Authenticate(token)
 
-	if err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: 500,
-			Body:       err.Error(),
-		}, nil
+		transaction.UserId = userId
+		if err != nil {
+			return events.APIGatewayProxyResponse{
+				StatusCode: 500,
+				Body:       err.Error(),
+			}, nil
+		}
 	}
 
-	transaction.UserId = userId
 	resp, err := trade.XChange(transaction)
 
 	if err != nil {

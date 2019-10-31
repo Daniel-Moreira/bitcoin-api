@@ -15,7 +15,7 @@ provider:
   name: aws
   runtime: go1.x
   stage: dev
-  region: sa-east-1
+  region: us-east-1
 
   environment:
     SERVICE: ${self:service}-${opt:stage, self:provider.stage}
@@ -49,38 +49,45 @@ custom:
   documentation: ${file(doc/serverless.doc.yml):documentation}
 
 functions:
+  applicationAuthorize:
+    handler: bin/authorizer
+    cors: true
   login:
-    handler: src/interface/authentication.login
+    handler: bin/login
     events:
       - http:
           path: login
           method: GET
           documentation: ${file(doc/serverless.doc.yml):endpoints.login}
   sign:
-    handler: src/interface/authentication.sign
+    handler: bin/sign
     events:
       - http:
           path: sign
           method: POST
           documentation: ${file(doc/serverless.doc.yml):endpoints.sign}
   xChangeBitcoin:
-    handler: src/interface/bitcoin.xChangeHandler
+    handler: bin/xChangeHandler
     events:
       - http:
           path: xChangeBitcoin
           method: POST
           documentation: ${file(doc/serverless.doc.yml):endpoints.xChange}
-        # authorizer:
-        #   name: authorize
-        #   resultTtlInSeconds: 0
+          authorizer:
+            name: applicationAuthorize
+            type: token
+            cors: true
   report:
-    handler: src/interface/report.handler
+    handler: bin/report
     events:
       - http:
           path: report
           method: GET
           documentation: ${file(doc/serverless.doc.yml):endpoints.report}
-
+          authorizer:
+            name: applicationAuthorize
+            type: token
+            cors: true
 resources:
   Resources:
     registerUsers:

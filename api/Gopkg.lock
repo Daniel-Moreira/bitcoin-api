@@ -10,8 +10,8 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/processcreds","aws/credentials/stscreds","aws/crr","aws/csm","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/ini","internal/sdkio","internal/sdkmath","internal/sdkrand","internal/sdkuri","internal/shareddefaults","private/protocol","private/protocol/json/jsonutil","private/protocol/jsonrpc","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/xml/xmlutil","service/dynamodb","service/dynamodb/dynamodbattribute","service/sts","service/sts/stsiface"]
-  revision = "13ad2b09f6ff7e16808b4a45c32684e6c66bf86d"
-  version = "v1.25.19"
+  revision = "95379426c152508a15cb44ed649fde05fa8d232b"
+  version = "v1.25.23"
 
 [[projects]]
   name = "github.com/dgrijalva/jwt-go"

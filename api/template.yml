@@ -61,13 +61,3 @@ Resources:
           Properties:
             Path: /report
             Method: GET
-  # register:
-  #   Type: AWS::Serverless::SimpleTable
-  #   Properties:
-  #     TableName: cache_dev
-  #   PrimaryKey:
-  #     Name: key
-  #     Type: String
-  #   ProvisionedThroughput:
-  #     ReadCapacityUnits: 5
-  #     WriteCapacityUnits: 5

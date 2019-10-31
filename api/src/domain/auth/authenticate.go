@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -22,8 +21,6 @@ func authenticateJwtToken(token string) (string, error) {
 	if !tk.Valid {
 		return "", errors.New("Unauthorized access!")
 	}
-
-	fmt.Println(claims)
 
 	return claims.Subject, nil
 }

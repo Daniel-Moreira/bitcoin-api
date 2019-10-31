@@ -16,7 +16,7 @@ func generateJwtToken(account Account, source string) (string, error) {
 	claims := &jwt.StandardClaims{
 		Subject:   account.UserID,
 		ExpiresAt: (time.Now().Add(60 * time.Minute)).Unix(),
-		Issuer:    source,
+		// Issuer:    source,
 	}
 
 	token := jwt.NewWithClaims(jwtMethod, claims)
@@ -29,7 +29,7 @@ func generateJwtToken(account Account, source string) (string, error) {
 	return signToken, nil
 }
 
-func Login(account Account, source string) (map[string]string, error) {
+func Login(account Account) (map[string]string, error) {
 	if source == "" {
 		return nil, errors.New("Source is required")
 	}
@@ -51,7 +51,7 @@ func Login(account Account, source string) (map[string]string, error) {
 		return nil, errors.New("User passaword doesn't match!")
 	}
 
-	jwtToken, err := generateJwtToken(account, source)
+	jwtToken, err := generateJwtToken(account)
 
 	if err != nil {
 		return nil, err

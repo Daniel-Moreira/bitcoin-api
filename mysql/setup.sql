@@ -1,8 +1,9 @@
 CREATE TABLE users_dev (
-  UserId       VARCHAR(40) PRIMARY KEY        NOT NULL,
-  Password     VARCHAR(40)                    NOT NULL,
-  Name         VARCHAR(100)                   NOT NULL,
-  Birth        DATE                           NOT NULL
+  UserId        VARCHAR(40) PRIMARY KEY        NOT NULL,
+  Password      VARCHAR(40)                    NOT NULL,
+  Name          VARCHAR(100)                   NOT NULL,
+  Birth         DATE                           NOT NULL,
+  BitCoinAmount DOUBLE                         DEFAULT 0
 );
 
 CREATE TABLE transactions_dev (

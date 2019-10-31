@@ -12,6 +12,12 @@ import (
 )
 
 func XChange(transaction Transaction) (map[string]string, error) {
+	err := mysql.UpdateCoinAmount(os.Getenv("USERS_DB"), transaction)
+
+	if err != nil {
+		return nil, err
+	}
+
 	now := time.Now()
 	transaction.Date = now.Format("2006-01-02 15:04:05")
 
@@ -22,7 +28,7 @@ func XChange(transaction Transaction) (map[string]string, error) {
 	var bitCoinPrice float64
 	bitCoinPrice, _ = strconv.ParseFloat(cache.Get("BITCOIN_PRICE"), 64)
 	if subDate >= 0 {
-		bitCoinPrice, err := cmc.GetBitcoinData()
+		bitCoinPrice, err = cmc.GetBitcoinData()
 		if err != nil {
 			return nil, err
 		}
@@ -31,10 +37,9 @@ func XChange(transaction Transaction) (map[string]string, error) {
 
 		cache.Put("BITCOIN_PRICE", fmt.Sprintf("%f", bitCoinPrice))
 		cache.Put("BITCOIN_EXP", afterTime.Format("2006-01-02 15:04:05"))
-
-		fmt.Println("Requesting")
 	}
 
+	fmt.Println("BitcoinPrice", bitCoinPrice)
 	transaction.Price = bitCoinPrice
 
 	command := mysql.InsertCommand{
@@ -42,7 +47,7 @@ func XChange(transaction Transaction) (map[string]string, error) {
 	}
 	command.Data = append(command.Data, transaction)
 
-	err := mysql.Insert(command)
+	err = mysql.Insert(command)
 
 	if err != nil {
 		return nil, err

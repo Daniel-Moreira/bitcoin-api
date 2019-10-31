@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"strings"
 
 	. "bitcoin-api-docker/api/src/customtypes"
 	"bitcoin-api-docker/api/src/domain/auth"
@@ -18,7 +19,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 
 	// Local token validation
 	if os.Getenv("AWS_SAM_LOCAL") == "true" {
-		token := req.Headers["Jwt"]
+		token := strings.Split(req.Headers["Authorization"], " ")[1]
 		_, err := auth.Authenticate(token)
 
 		if err != nil {

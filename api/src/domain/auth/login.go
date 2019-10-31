@@ -11,7 +11,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func generateJwtToken(account Account, source string) (string, error) {
+func generateJwtToken(account Account) (string, error) {
 	jwtMethod := jwt.GetSigningMethod("HS256")
 	claims := &jwt.StandardClaims{
 		Subject:   account.UserID,
@@ -30,10 +30,6 @@ func generateJwtToken(account Account, source string) (string, error) {
 }
 
 func Login(account Account) (map[string]string, error) {
-	if source == "" {
-		return nil, errors.New("Source is required")
-	}
-
 	command := mysql.SelectCommand{
 		TableName:     os.Getenv("USERS_DB"),
 		Projection:    []string{"Password"},

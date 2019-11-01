@@ -1,18 +1,12 @@
 version: '3.3'
 services:
-  # api:
-  #   build: ./api
-  #   ports:
-  #    - "3000:3000"
-  #   depends_on:
-  #    - db
   dynamo:
     image: amazon/dynamodb-local:latest
     ports:
       - "8000:8000"
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data/"]
     volumes:
-      - ./data:/data
+      - ./dynamodb/data:/data
     networks:
       - local_network
   db:

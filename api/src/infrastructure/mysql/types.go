@@ -25,3 +25,9 @@ const (
 	USER Conditions = "UserId = ?"
 	DATE Conditions = "Date(transactions_dev.Date) = ?"
 )
+
+type Sql interface {
+	Insert(command InsertCommand) error
+}
+
+type Mysql struct{}

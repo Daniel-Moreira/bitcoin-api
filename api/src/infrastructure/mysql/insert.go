@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Insert(command InsertCommand) error {
+func (Mysql) Insert(command InsertCommand) error {
 	db, err := client()
 
 	defer db.Close()

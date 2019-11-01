@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bitcoin-api-docker/api/src/infrastructure/mysql"
 	"encoding/json"
 
 	. "bitcoin-api-docker/api/src/customtypes"
@@ -14,7 +15,8 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	var account Account
 	json.Unmarshal([]byte(req.Body), &account)
 
-	resp, err := auth.Sign(account)
+	mysql := &mysql.Mysql{}
+	resp, err := auth.Sign(account, mysql)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{

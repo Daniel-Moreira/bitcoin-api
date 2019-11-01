@@ -8,6 +8,7 @@ import (
 	. "bitcoin-api-docker/api/src/customtypes"
 	"bitcoin-api-docker/api/src/domain/auth"
 	"bitcoin-api-docker/api/src/domain/trade"
+	"bitcoin-api-docker/api/src/infrastructure/mysql"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -33,7 +34,8 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		transaction.UserId = req.RequestContext.Authorizer["principalId"].(string)
 	}
 
-	resp, err := trade.XChange(transaction)
+	mysql := &mysql.Mysql{}
+	resp, err := trade.XChange(transaction, mysql)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{

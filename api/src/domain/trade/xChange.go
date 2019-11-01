@@ -4,15 +4,15 @@ import (
 	. "bitcoin-api-docker/api/src/customtypes"
 	"bitcoin-api-docker/api/src/domain/cache"
 	"bitcoin-api-docker/api/src/infrastructure/cmc"
-	"bitcoin-api-docker/api/src/infrastructure/mysql"
+	. "bitcoin-api-docker/api/src/infrastructure/mysql"
 	"fmt"
 	"os"
 	"strconv"
 	"time"
 )
 
-func XChange(transaction Transaction) (map[string]string, error) {
-	err := mysql.UpdateCoinAmount(os.Getenv("USERS_DB"), transaction)
+func XChange(transaction Transaction, sql Sql) (map[string]string, error) {
+	err := UpdateCoinAmount(os.Getenv("USERS_DB"), transaction)
 
 	if err != nil {
 		return nil, err
@@ -42,12 +42,12 @@ func XChange(transaction Transaction) (map[string]string, error) {
 	fmt.Println("BitcoinPrice", bitCoinPrice)
 	transaction.Price = bitCoinPrice
 
-	command := mysql.InsertCommand{
+	command := InsertCommand{
 		TableName: os.Getenv("TRANSACTIONS_DB"),
 	}
 	command.Data = append(command.Data, transaction)
 
-	err = mysql.Insert(command)
+	err = sql.Insert(command)
 
 	if err != nil {
 		return nil, err

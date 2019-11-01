@@ -3,7 +3,6 @@ package main
 import (
 	"bitcoin-api-docker/api/src/domain/auth"
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -30,10 +29,7 @@ func generatePolicy(principalId, effect, resource string) events.APIGatewayCusto
 }
 
 func handleRequest(ctx context.Context, event events.APIGatewayCustomAuthorizerRequest) (events.APIGatewayCustomAuthorizerResponse, error) {
-	fmt.Println(event.AuthorizationToken)
-	fmt.Println(ctx)
 	token := strings.Split(event.AuthorizationToken, " ")[1]
-	fmt.Println("token", token)
 	userId, err := auth.Authenticate(token)
 
 	err = nil

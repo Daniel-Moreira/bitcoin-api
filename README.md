@@ -53,3 +53,33 @@
 	      "date":"yourDate" (ex.: "2009-10-30")
       }
       ```
+
+## Folder Structure
+  The application layer of this project is divided into 4 main folders, as shown bellow: 
+  ```ansi
+  api
+  └── src
+      ├── customtypes
+      ├── domain
+      ├── infrastructure
+      └── interfaces
+  ```
+
+ ### CustomTypes
+    This folder describe structures utilized in many different locals.
+  ### Domain
+    This folder describe the bussiness rules.
+  ### Infrastructure
+    This folder describe exit points. Handles how to communicate with anything exterior to de application.
+  ### Interface
+    This folder describe entry poins. Handles how the exterior communicate with the application.  
+
+## Further Details
+  More info can be found at [readme](/api/README.md).
+  Some useful images about how the project was design are shown bellow.
+
+  ### BitcoinAPI Design
+  ![Bitcoin API](/assets/BitcoinAPI.png)
+  
+  ### Database Diagram
+  ![DB Diagram](/assets/BitCoinBDDiagram.png)
